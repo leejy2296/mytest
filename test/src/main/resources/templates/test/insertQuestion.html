@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>insertQuestions</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <main class="page payment-page">
+    <section class="payment-form dark">
+      <div class="container">
+        <div class="block-heading">
+          <h2>문제 등록 PAGE</h2>
+          <p>문제를 추가하려면 추가 버튼을 누르세요.</p>
+        </div>
+        <form th:id ="questionForm" th:action="@{/test/questionRegister}" th:object="${test}" method="post">
+          <div class="products">
+            <h3 class="title">기본정보</h3>
+            <div class="item">
+              <label for="TestListId" class="item-name">문제집이름</label>
+              <input class="form-control" type="text" th:field="*{TestlistId}" placeholder="문제집이름을 입력해 주세요."/>
+            </div>
+            <div class="item">
+              <label for="classId" class="item-name">반이름</label>
+              <input class="form-control" type="text" th:field="*{classId}" placeholder="반이름을 입력해 주세요." />
+            </div>
+            <div class="item">
+              <label for="academyId" class="item-name">학원명</label>
+              <input class="form-control" type="text" th:field="*{academyId}" placeholder="학원명을 입력해 주세요." />
+            </div>
+            
+            <div>
+                <br>
+                <button type="button" class="btn btn-primary btn-block" th:onclick="insertQuestion()">저장하기</button>
+                <br>
+                <a th:href="@{/test/main.html}" class="btn btn-primary btn-block">뒤로가기</a>
+                <br>
+                <button class="btn btn-primary btn-block" type="button" th:onclick="addQuestion()">문제추가</button>
+                <br>
+            </div>
+          </div>
+          <div class="card-details">
+            <h3 class="title">문제정보</h3>
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <label for="questionContent">문제 내용</label>
+                <input class="form-control" type="text" th:id="questionContent0" th:name="questionContent" placeholder="문제를 입력해 주세요." />
+              
+                <label for="score">배점</label>
+                <input class="form-control" type="number" th:id="score0" th:name="score"/>
+                
+                <label for="answer">문제의 답</label>
+                <input class="form-control" type="text" th:id="answer0" th:name="answer" placeholder="답을 입력해 주세요." />
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+    </section>
+  </main>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+<script th:inline="javascript">             
+        /*<![CDATA[*/
+            var array = [];
+            var i = 1;
+        function addQuestion(){
+            var addDiv = document.createElement("div");
+            addDiv.setAttribute("id","addQuestion"+i);
+            addDiv.setAttribute("class","card-details");
+            addDiv.innerHTML = 
+            "<label for='questionContent'>문제 내용</label>"+
+            "<input class='form-control' type='text' id='questionContent"+i+"' name='questionContent' placeholder='문제를 입력해 주세요.'/>"+
+            "<label for='score'>배점</label>"+
+            "<input class='form-control' type='number' id='score"+i+"' name='score'>"+
+            "<label for='answer'>문제의 답</label>"+
+            "<input class='form-control' type='text' id='answer"+i+"' name='answer' placeholder='답을 입력해 주세요.'/>";
+            
+            questionForm.appendChild(addDiv);
+            
+            i++;
+        }
+        
+        function insertQuestion(){
+            for(var e=0;e<=i-1;e++){
+                
+                var list = {
+                        testlistId : "testlistId",
+                        classId : "classId",
+                        academyId : "academyId",
+                        questionContent : "questionContent",
+                        score : "score",
+                        answer : "answer"
+                };
+                // 문제에 빈칸있는지 검사
+                if(document.getElementById("TestlistId").value !== "" &&
+                    document.getElementById("classId").value !== "" &&
+                    document.getElementById("academyId").value !== "" &&
+                    document.getElementById("questionContent"+e).value !== "" &&
+                    document.getElementById("score"+e).value !== "" &&
+                    document.getElementById("answer"+e).value !== "")
+                {
+                    list.testlistId = document.getElementById("TestlistId").value;
+                    list.classId = document.getElementById("classId").value;
+                    list.academyId = document.getElementById("academyId").value;
+                    list.questionContent = document.getElementById("questionContent"+e).value;
+                    list.score = document.getElementById("score"+e).value;
+                    list.answer = document.getElementById("answer"+e).value;
+                    
+                    array.push(list);
+                }else {
+                    alert('빈칸을 입력해주세요.');
+                    return false;
+                }
+            }
+            
+            $.ajax({
+                url:'/test/questionRegister',
+                type:'post',
+                contentType:'application/json',
+                data: JSON.stringify(array),
+                success:function(data){
+                    console.log(data);
+                    if(data==1){
+                        alert('문제 등록 완료');
+                        location.href= "@{/test/main.html}";
+                    }else{
+                        
+                    }
+                },
+                error:function(){
+                    alert('에러입니다.');
+                }
+            });
+            
+        }
+
+        /*]]>*/
+        </script>
+</html>

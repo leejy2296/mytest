@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>insertTestList</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form th:action="@{/test/testListRegister}" th:object="${test}" method="post">
+                <label for="testlistId">문제집이름</label>
+                <input type="text" th:field="*{testlistId}" placeholder="문제집이름을 입력해 주세요." />
+                    
+                <label for="subjectId">과목명</label>
+                <input type="text" th:field="*{subjectId}" placeholder="과목명을 입력해 주세요." />
+               
+                <label for="classId">반이름</label>
+                <input type="text" th:field="*{classId}" placeholder="반이름을 입력해 주세요." />
+                
+                <label for="academyId">학원명</label>
+                <input type="text" th:field="*{academyId}" placeholder="학원명을 입력해 주세요." />
+                
+                <a th:href="@{/test/main.html}">뒤로가기</a>
+                <button type="submit">저장하기</button>
+            
+        </form>
+    </body>
+</html>
