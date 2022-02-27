@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>MainPage</title>
+        <meta charset="UTF-8">
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+    <body>
+       <table>
+                <thead>
+                    <tr>
+                        <th>문제ID</th>
+                        <th>문제 내용</th>
+                        <th>문제 답안</th>
+                        <th>학생 답안</th>
+                        <th>정답 체크</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${not #lists.isEmpty( answerList )}" th:each="row, i : ${answerList}">
+                        <td style="display:none">
+                            <input id = "studentId" type="hidden" th:value="${row.studentId}">
+                        </td>
+                        <td>
+                            <input th:id ="'questionId'+${i.index+1}" th:value="${row.questionId}" readonly>
+                        </td>
+                        <td>
+                            <input th:id = "'questionContent'+${i.index+1}" th:value="${row.questionContent}" readonly>
+                        </td>
+                        <td>
+                            <input th:id = "'questionAnswer'+${i.index+1}" th:value="${row.answer}" readonly>
+                        </td>
+                        <td>
+                            <input th:id = "'studentAnswer'+${i.index+1}" th:value="${row.studentAnswer}" readonly>
+                        </td>
+                        <td style='text-align:center;'>
+                            <input th:id="'chk'+${i.index+1}" th:name="checkbox" type="checkbox">
+                        </td>
+                    </tr>
+                    <tr th:unless="${not #lists.isEmpty( answerList )}">
+                        <td colspan="5">조회된 결과가 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div>
+                <a th:href="@{/test/main.html}">뒤로가기</a>
+                <button onclick="test()">저장</button>
+            </div>
+    </body>
+    <script th:inline="javascript">             
+        /*<![CDATA[*/
+        	
+        var length = $('[name="checkbox"]').length;
+        var qlist = [];
+        
+        $(document).ready(function(){
+        	for(var o =1;o<=length;o++){
+        		if(document.getElementById("studentAnswer"+o).value == 
+        			document.getElementById("questionAnswer"+o).value){
+        			 document.getElementById("chk"+o).checked = true;
+        		}
+        	}
+        });
+        
+        function test(){
+        	for(var e=1;e<=length;e++){
+        		
+        		var data = {
+        				studentId : "studentId",
+        				questionId : "questionId"
+        		};
+        		
+        		if($('#chk'+e).is(":checked")){
+        			data.studentId = $('#studentId').val();
+        			data.questionId = $('#questionId'+e).val();
+        			
+        			console.log(data.studentId);
+        			console.log(data.questionId);
+        			
+        			qlist.push(data);
+        		}
+        	}
+        	
+        	$.ajax({
+                url:'/test/checkCON',
+                type:'post',
+                contentType:'application/json',
+                data: JSON.stringify(qlist),
+                success:function(data){
+                    console.log(data);
+                    if(data==1){
+                        alert('채점 완료');
+                        location.href= "main.html";
+                    }else{
+                        
+                    }
+                },
+                error:function(){
+                    alert('에러입니다.');
+                }
+            });
+        }
+        /*]]>*/
+        </script>
+</html>
