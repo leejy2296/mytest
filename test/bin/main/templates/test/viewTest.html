@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>insertQuestion</title>
+        <meta charset="UTF-8">
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+    
+        <table th:object="${test}">
+                <thead>
+                    <tr>
+                        <th>문제ID</th>
+                        <th>문제 내용</th>
+                        <th>답안 입력</th>
+                        <th>정보입력</th>
+                        <th>
+                            <input type="text" th:field="*{studentId}" placeholder="학생id를 입력해주세요">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id ="tbody">
+                    <tr th:if="${not #lists.isEmpty( questionList )}" th:each="row, i : ${questionList}">
+                        <td style="display:none">
+                            <input th:type="hidden" th:name="testlistId" th:id ="testlistId" th:value="${row.testlistId}">
+                            <input th:type="hidden" th:name="classId" th:id ="classId" th:value="${row.classId}">
+                            <input th:type="hidden" th:name="academyId" th:id ="academyId" th:value="${row.academyId}">
+                            <input th:type="hidden" th:name="score" th:id = "'score'+${i.index+1}" th:value="${row.score}">
+                        </td>
+                        <td>
+                            <input th:id="'questionId'+${i.index+1}" th:name="'questionId'+${i.index+1}" th:value="${row.questionId}" readonly>
+                        </td>
+                        <td>
+                            <input th:id="'questionContent'+${i.index+1}" th:name="'questionContent'+${i.index+1}" th:value="${row.questionContent}" readonly>
+                        </td>
+                        <td>
+                            <input type="text" th:name = "'answerInput'+${i.index+1}" th:id="'answerInput'+${i.index+1}">
+                        </td>
+                    </tr>
+                    <tr th:unless="${not #lists.isEmpty( questionList )}">
+                        <td colspan="5">조회된 결과가 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <a th:href="@{/test/main.html}">뒤로가기</a>
+                <button onclick="testbutton()">제출</button>
+            </div>
+            <script th:inline="javascript">             
+        /*<![CDATA[*/
+        var length = document.getElementById("tbody").getElementsByTagName("tr").length;
+        var array = [];
+        
+        function testbutton(){
+            for(var i=1;i<=length;i++){
+            	
+            	var list = {
+                        studentId : "studentId",
+                        testlistId : "testlistId",
+                        classId : "classId",
+                        academyId : "academyId",
+                        questionId : "questionId",
+                        questionContent : "questionContent",
+                        score : "score",
+                        studentAnswer : "studentAnswer"
+                };
+            	// 빈칸있는지 검사
+            	if(document.getElementById("studentId").value !== "" &&
+                   document.getElementById("testlistId").value !== "" &&
+                   document.getElementById("classId").value !== "" &&
+                   document.getElementById("academyId").value !== "" &&
+                   document.getElementById("questionId"+i).value !== "" &&
+                   document.getElementById("questionContent"+i).value !== "" &&
+                   document.getElementById("score"+i).value !== "" &&
+                   document.getElementById("answerInput"+i).value !== "")
+                    {
+            	list.studentId = document.getElementById("studentId").value;
+            	list.testlistId = document.getElementById("testlistId").value;
+            	list.classId = document.getElementById("classId").value;
+            	list.academyId = document.getElementById("academyId").value;
+            	list.questionId = document.getElementById("questionId"+i).value;
+            	list.questionContent = document.getElementById("questionContent"+i).value;
+            	list.score = document.getElementById("score"+i).value;
+            	list.studentAnswer = document.getElementById("answerInput"+i).value;
+            	
+            	array.push(list);
+                    }else{
+                    	alert('빈칸을 입력해주세요.');
+                    	return false;
+                    }
+            }
+            $.ajax({
+            	url:'/test/answerRegister',
+            	type:'post',
+            	contentType:'application/json',
+            	data: JSON.stringify(array),
+            	success:function(data){
+            		console.log(data);
+            		if(data==1){
+            			alert('제출 완료');
+            			location.href= "main.html";
+            		}else{
+            			
+            		}
+            	},
+            	error:function(){
+            		alert('에러입니다.');
+            	}
+            });
+        }
+
+        /*]]>*/
+        </script>
+    
+</html>

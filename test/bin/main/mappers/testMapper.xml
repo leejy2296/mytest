@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.TestMapper">
+    
+    <insert id="insertTestList" parameterType="TestDTO">
+        insert into tt_testlist (
+            testlist_id,
+            subject_id,
+            class_id,
+            academy_id
+        )
+        values (
+            #{testlistId},
+            #{subjectId},
+            #{classId},
+            #{academyId}
+        )
+    </insert>
+    
+    <insert id="insertQuestion" parameterType="TestDTO">
+        insert into tt_question (
+            question_id,
+            score,
+            question_content,
+            answer,
+            testlist_id,
+            class_id,
+            academy_id
+        )
+        values (
+            question_seq.nextval,
+            #{score},
+            #{questionContent},
+            #{answer},
+            #{testlistId},
+            #{classId},
+            #{academyId}
+        )
+    </insert>
+    
+    <select id="selectQuestion" parameterType="String" resultType="TestDTO">
+        SELECT
+            question_id,
+            score,
+            question_content,
+            answer,
+            testlist_id,
+            class_id,
+            academy_id
+        FROM
+            tt_question
+        WHERE
+            question_id = #{qid}
+    </select>
+    
+    <select id="selectAllQuestion" parameterType="String" resultType="TestDTO">
+        SELECT
+            question_id,
+            score,
+            question_content,
+            answer,
+            testlist_id,
+            class_id,
+            academy_id
+        FROM
+            tt_question
+        WHERE
+            testlist_id = #{tid}
+    </select>
+    
+    <select id="selectTestList" resultType="TestDTO">
+        SELECT
+            testlist_id
+        FROM
+            tt_testlist
+    </select>
+    
+    <update id="updateQuestion" parameterType="TestDTO">
+        update tt_question
+        set
+            score = #{score},
+            question_content = #{questionContent},
+            answer = #{answer},
+            testlist_id = #{testlistId},
+            class_id = #{classId},
+            academy_id = #{academyId}
+        where
+            question_id = #{questionId}
+    </update>
+    
+    <delete id="deleteQuestion" parameterType="String">
+        delete 
+            from 
+            tt_question
+        where
+            question_id = #{qid}
+    </delete>
+    
+    <select id="viewTest" parameterType ="String" resultType="TestDTO">
+        SELECT
+            question_id,
+            question_content,
+            testlist_id,
+            answer,
+            class_id,
+            academy_id,
+            score
+        FROM
+            tt_question
+        where
+            testlist_id = #{tid}
+    </select>
+    
+    <select id="viewAnswer" parameterType ="HashMap" resultType="TestDTO">
+        SELECT 
+            QUESTION_ID,
+            student_answer,
+            student_id
+        FROM 
+            TT_STUDENT_ANSWER 
+        WHERE 
+            STUDENT_ID = #{sid} 
+        AND 
+            TESTLIST_ID = #{tid}
+    </select>
+    
+    <insert id="insertAnswer" parameterType="TestDTO">
+        insert into tt_student_answer (
+            student_id,
+            testlist_id,
+            question_id,
+            student_answer,
+            score,
+            class_id,
+            academy_id,
+            correct_or_not,
+            answer_date
+        )
+        values (
+            #{studentId},
+            #{testlistId},
+            #{questionId},
+            #{studentAnswer},
+            #{score},
+            #{classId},
+            #{academyId},
+            'N',
+            sysdate
+        )
+    </insert>
+    
+    <update id="updateCON" parameterType="TestDTO">
+        UPDATE 
+            TT_STUDENT_ANSWER 
+		SET 
+		  CORRECT_OR_NOT = 'Y'
+		WHERE 
+		  QUESTION_ID = #{questionId}
+		AND 
+		  STUDENT_ID = #{studentId}
+    </update>
+    
+
+</mapper>
