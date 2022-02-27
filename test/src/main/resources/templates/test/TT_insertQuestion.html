@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title>insertQuestions</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-<link rel="stylesheet" href="/css/insertQuestionStyle.css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="/js/insertQuestion.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-</head>
-<body>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
+
+    <th:block layout:fragment="title">
+        <title>문제등록 페이지</title>
+    </th:block>
+  
+	<th:block layout:fragment="customCss">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="/css/insertQuestionStyle.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	</th:block>
+	
+	<th:block layout:fragment="customJs">
+        <script defer src="/js/insertQuestion.js"></script>
+        <script defer src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script defer src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    </th:block> 
+
+
+<div layout:fragment="content">
   <main class="page payment-page">
     <section class="payment-form dark">
       <div class="container">
@@ -20,12 +27,12 @@
           <h2>문제 등록 PAGE</h2>
           <p>문제를 추가하려면 추가 버튼을 누르세요.</p>
         </div>
-        <form th:id ="questionForm" th:action="@{/test/questionRegister}" th:object="${test}" method="post">
+        <form th:id ="questionForm" th:action="@{/questionRegister}" th:object="${question}" method="post">
           <div class="products">
             <h3 class="title">기본정보</h3>
             <div class="item">
               <label for="TestListId" class="item-name">문제집이름</label>
-              <input class="form-control" type="text" th:field="*{TestlistId}" placeholder="문제집이름을 입력해 주세요."/>
+              <input class="form-control" type="text" th:field="*{testListId}" placeholder="문제집이름을 입력해 주세요."/>
             </div>
             <div class="item">
               <label for="classId" class="item-name">반이름</label>
@@ -40,9 +47,9 @@
                 <br>
                 <button type="button" class="btn btn-primary btn-block" th:onclick="insertQuestion()">저장하기</button>
                 <br>
-                <a th:href="@{/test/main.html}" class="btn btn-primary btn-block">뒤로가기</a>
-                <br>
                 <button class="btn btn-primary btn-block" type="button" th:onclick="addQuestion()">문제추가</button>
+                <!-- <br>
+                <a th:href="@{/test/main.html}" class="btn btn-primary btn-block">뒤로가기</a> -->
                 <br>
             </div>
           </div>
@@ -53,13 +60,13 @@
                 <p th:id="count0" th:text="${count}+1"></p>
                 
                 <label for="questionContent">문제 내용</label>
-                <input class="form-control" type="text" th:id="questionContent0" th:name="questionContent" placeholder="문제를 입력해 주세요." />
+                <input class="form-control" type="text" th:id="testQuestionContent0" th:name="testQuestionContent" placeholder="문제를 입력해 주세요." />
               
                 <label for="score">배점</label>
-                <input class="form-control" type="number" th:id="score0" th:name="score"/>
+                <input class="form-control" type="number" th:id="testQuestionScore0" th:name="testQuestionScore"/>
                 
                 <label for="answer">문제의 답</label>
-                <input class="form-control" type="text" th:id="answer0" th:name="answer" placeholder="답을 입력해 주세요." />
+                <input class="form-control" type="text" th:id="testQuestionAnswer0" th:name="testQuestionAnswer" placeholder="답을 입력해 주세요." />
               </div>
             </div>
           </div>
@@ -67,6 +74,6 @@
         </div>
     </section>
   </main>
-</body>
+</div>
 
 </html>

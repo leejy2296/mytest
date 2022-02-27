@@ -48,10 +48,8 @@ public class TestController {
             /* qid 넘어온게 없는 경우 신규 문제 생성 */
             int count = testService.countQuestion();
             TestDTO test = new TestDTO();
-            List<TestDTO> list = testService.getTestList();
 
             model.addAttribute("count", count);
-            model.addAttribute("list", list);
             model.addAttribute("test", test);
         } else {
             /* qid가 넘어온 경우 수정 처리 */

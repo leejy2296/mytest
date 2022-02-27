@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.TT_TestMapper">
+
+    <select id="countQuestion" resultType="_int">
+        select 
+           count(*)
+        from
+           [문제 테이블 이름]
+    </select>
+    
+    <insert id="registerQuestion" parameterType="TestQuestionDTO">
+        insert into [문제 테이블 이름] (
+            test_question_id,
+            test_question_score,
+            test_question_content,
+            test_question_answer,
+            test_question_image
+            test_list_id,
+            class_id,
+            academy_id,
+            insert_user,
+            update_user,
+            insert_date,
+            update_date
+        )
+        values (
+            question_seq.nextval,
+            #{score},
+            #{questionContent},
+            #{answer},
+            #{image},
+            #{testlistId},
+            #{classId},
+            #{academyId},
+            #{insertUser},
+            null,
+            sysdate,
+            null
+        )
+    </insert>
+</mapper>
