@@ -25,5 +25,7 @@ public class TestDTO {
     private String studentAnswer;
 //    학생 아이디
     private String studentId;
+//    등록된 문제 수
+    private int count;
 
 }

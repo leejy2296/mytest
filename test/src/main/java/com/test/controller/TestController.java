@@ -46,9 +46,11 @@ public class TestController {
     public String toInsertQuestionPage(@RequestParam(value = "qid", required = false) String qid, Model model) {
         if (qid == null) {
             /* qid 넘어온게 없는 경우 신규 문제 생성 */
+            int count = testService.countQuestion();
             TestDTO test = new TestDTO();
             List<TestDTO> list = testService.getTestList();
 
+            model.addAttribute("count", count);
             model.addAttribute("list", list);
             model.addAttribute("test", test);
         } else {
@@ -126,10 +128,8 @@ public class TestController {
     public String toMarkAnswer(Model model, String TestlistId, String StudentId, HashMap<String, String> ids) {
         ids.put("tid", TestlistId);
         ids.put("sid", StudentId);
-        List<TestDTO> result = testService.viewTest(TestlistId);
-        List<TestDTO> result2 = testService.viewAnswer(ids);
-        model.addAttribute("questionList", result);
-        model.addAttribute("answerList", result2);
+        List<TestDTO> result = testService.viewAnswer(ids);
+        model.addAttribute("answerList", result);
 
         return "test/markAnswer";
     }
@@ -167,6 +167,12 @@ public class TestController {
             result = testService.updateCON(dto);
         }
         return result;
+    }
+
+    @GetMapping("/blank")
+    public String test() {
+
+        return "blank";
     }
 
 }

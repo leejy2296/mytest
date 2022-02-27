@@ -26,4 +26,6 @@ public interface TestService {
     public int insertAnswer(TestDTO params);
 
     public int updateCON(TestDTO params);
+
+    public int countQuestion();
 }

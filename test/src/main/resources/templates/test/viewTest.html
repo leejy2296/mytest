@@ -89,15 +89,15 @@
                     }
             }
             $.ajax({
-            	url:'/test/answerRegister', //controller에서 인식할 주소
-            	type:'post', //post방식으로 전송
+            	url:'/test/answerRegister',
+            	type:'post',
             	contentType:'application/json',
             	data: JSON.stringify(array),
             	success:function(data){
             		console.log(data);
             		if(data==1){
             			alert('제출 완료');
-            			location.href= "http://localhost:9090/test/main.html";
+            			location.href= "main.html";
             		}else{
             			
             		}

@@ -111,4 +111,13 @@ public class TestServiceImpl implements TestService {
         return queryResult;
     }
 
+    @Override
+    public int countQuestion() {
+        int result = 0;
+
+        result = testmapper.countQuestion();
+
+        return result;
+    }
+
 }

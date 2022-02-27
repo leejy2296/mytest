@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.test.mapper.TestMapper">
     
+    <select id="countQuestion" resultType="_int">
+        select 
+            count(*)
+        from
+            tt_question
+    </select>
+    
     <insert id="insertTestList" parameterType="TestDTO">
         insert into tt_testlist (
             testlist_id,
@@ -112,16 +119,24 @@
     </select>
     
     <select id="viewAnswer" parameterType ="HashMap" resultType="TestDTO">
-        SELECT 
-            QUESTION_ID,
-            student_answer,
-            student_id
+        SELECT DISTINCT
+            tq.question_id, 
+            tq.question_content, 
+            tq.answer, 
+            tsa.student_answer, 
+            tsa.student_id
         FROM 
-            TT_STUDENT_ANSWER 
+            TT_QUESTION tq 
+        INNER JOIN 
+            TT_STUDENT_ANSWER tsa 
+        ON 
+            tq.QUESTION_ID = tsa.QUESTION_ID
         WHERE 
-            STUDENT_ID = #{sid} 
+            tsa.STUDENT_ID = #{sid} 
         AND 
-            TESTLIST_ID = #{tid}
+            tsa.TESTLIST_ID = #{tid}
+        ORDER BY 
+            QUESTION_ID
     </select>
     
     <insert id="insertAnswer" parameterType="TestDTO">

@@ -33,7 +33,7 @@ CREATE TABLE tt_student_answer (
 	student_id varchar2(10),
 	testlist_id varchar2(10),
 	question_id number(10),
-	student_answer varchar2(20),
+	student_answer varchar2(200),
 	score number(3),
 	class_id varchar2(10),
 	academy_id varchar2(10),
@@ -64,6 +64,8 @@ SELECT * FROM TT_TESTLIST;
 SELECT * FROM TT_QUESTION;
 SELECT * FROM TT_STUDENT_ANSWER;
 
+SELECT count(*) FROM tt_question;
+
 SELECT QUESTION_ID, student_answer FROM TT_STUDENT_ANSWER WHERE STUDENT_ID = 'test1' AND TESTLIST_ID = '테스트1';
 SELECT QUESTION_ID, QUESTION_CONTENT, answer FROM TT_QUESTION WHERE TESTLIST_ID = '테스트1';
 
@@ -73,9 +75,10 @@ DROP TABLE TT_STUDENT_ANSWER;
 
 COMMIT;
 
--- 정답 처리용 쿼리
-UPDATE TT_STUDENT_ANSWER 
-SET CORRECT_OR_NOT = 'N'
-WHERE QUESTION_ID = '3'
-AND STUDENT_ID = 'test1';
+SELECT
+tq.question_id, tq.question_content, tq.answer, tsa.student_answer, tsa.student_id
+FROM TT_QUESTION tq INNER JOIN TT_STUDENT_ANSWER tsa ON tq.QUESTION_ID = tsa.QUESTION_ID
+WHERE tsa.STUDENT_ID ='test1' AND tsa.TESTLIST_ID = '테스트1'
+ORDER BY QUESTION_ID ;
 
+SELECT student_id, score FROM TT_STUDENT_ANSWER WHERE testlist_id ='테스트1' AND student_id ='test1' AND correct_or_not ='Y';

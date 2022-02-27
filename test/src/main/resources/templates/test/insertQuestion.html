@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/LEEstyle.css">
 </head>
 <body>
   <main class="page payment-page">
@@ -46,6 +46,8 @@
             <h3 class="title">문제정보</h3>
             <div class="row">
               <div class="form-group col-sm-12">
+                <p th:id="count0" th:text="${count}+1"></p>
+                
                 <label for="questionContent">문제 내용</label>
                 <input class="form-control" type="text" th:id="questionContent0" th:name="questionContent" placeholder="문제를 입력해 주세요." />
               
@@ -62,18 +64,21 @@
     </section>
   </main>
 </body>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </body>
 <script th:inline="javascript">             
         /*<![CDATA[*/
             var array = [];
             var i = 1;
         function addQuestion(){
+            var c = "count"+(i-1);
             var addDiv = document.createElement("div");
             addDiv.setAttribute("id","addQuestion"+i);
             addDiv.setAttribute("class","card-details");
             addDiv.innerHTML = 
+            "<p id='count"+i+"'>"+(parseInt($('#'+c).text())+1)+"</p>"+
             "<label for='questionContent'>문제 내용</label>"+
             "<input class='form-control' type='text' id='questionContent"+i+"' name='questionContent' placeholder='문제를 입력해 주세요.'/>"+
             "<label for='score'>배점</label>"+
@@ -128,7 +133,7 @@
                     console.log(data);
                     if(data==1){
                         alert('문제 등록 완료');
-                        location.href= "@{/test/main.html}";
+                        location.href= "main.html";
                     }else{
                         
                     }
@@ -139,7 +144,6 @@
             });
             
         }
-
         /*]]>*/
         </script>
 </html>
