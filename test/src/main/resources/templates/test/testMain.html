@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
+
+    <th:block layout:fragment="title">
+        <title>문제 등록/수정 페이지</title>
+    </th:block>
+    
+    <!-- customCss layout start -->
+    <th:block layout:fragment="customCss">
+        <link rel="stylesheet" href="/css/testMain.css">
+    </th:block>
+    <!-- customCss layout end -->
+    
+    <!-- customJs layout start -->
+    <th:block layout:fragment="customJs">
+        <script defer src="/js/testMain.js"></script>
+        <script defer src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script defer src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    </th:block>
+    <!-- customJs layout end -->
+    
+    
+    <!-- content layout start -->
+    <div layout:fragment="content">
+        <div class="container py-5">
+
+    <!-- session role이 선생님일때 -->
+    <div class="row text-center align-items-end" th:if="${session.role} == 'teacher'">
+      <!-- Pricing Table-->
+      <div class="col-lg-3 mb-5 mb-lg-0">
+        <div class="bg-white p-5 rounded-lg shadow">
+          <p class="cardText">등록</p>
+
+          <div class="custom-separator my-4 mx-auto bg-primary"></div>
+
+          <a onclick="popup('/test/insertTestList2','insertTestList')" class="btn btn-primary btn-block p-2 shadow rounded-pill">문제집 등록</a>
+          <a onclick="popup('/test/insertQuestion2','insertQuestion')" class="btn btn-primary btn-block p-2 shadow rounded-pill">문제 등록</a>
+        </div>
+      </div>
+      <!-- END -->
+
+      <!-- Pricing Table-->
+      <div class="col-lg-3 mb-5 mb-lg-0">
+        <div class="bg-white p-5 rounded-lg shadow">
+          <p class="cardText">조회</p>
+
+          <div class="custom-separator my-4 mx-auto bg-primary"></div>
+            <a th:href="@{testMain}" class="btn btn-primary btn-block p-2 shadow rounded-pill">문제집 조회</a>
+            <a th:href="@{testMain}" class="btn btn-primary btn-block p-2 shadow rounded-pill">문제 조회</a>
+        </div>
+      </div>
+      <!-- END -->
+      
+      <!-- Pricing Table-->
+      <div class="col-lg-3 mb-5 mb-lg-0">
+        <div class="bg-white p-5 rounded-lg shadow">
+          <p class="cardText">수정</p>
+
+        <div class="custom-separator my-4 mx-auto bg-primary"></div>
+            <a th:href="@{testMain}" class="btn btn-primary btn-block p-2 shadow rounded-pill">문제집 수정</a>
+            <a th:href="@{testMain}" class="btn btn-primary btn-block p-2 shadow rounded-pill">문제 수정</a>
+        </div>
+      </div>
+      <!-- END -->
+      
+      <!-- Pricing Table-->
+      <div class="col-lg-3 mb-5 mb-lg-0">
+        <div class="bg-white p-5 rounded-lg shadow">
+          <p class="cardText">채점</p>
+
+          <div class="custom-separator my-4 mx-auto bg-primary"></div>
+            <form th:action="@{markTest}" th:object="${test}" method="post">
+                <input class="inputTest" type="text" th:field="*{testListId}" placeholder="채점할 문제집 이름">
+                <button type="submit" class="btn btn-primary btn-block p-2 shadow rounded-pill">이동</button>
+          </form>
+        </div>
+      </div>
+      <!-- END -->
+
+    </div>
+    
+    
+    <!-- session role이 학생일때 -->
+    <div class="row text-center" th:unless="${session.role} == 'teacher'">
+      
+      <!-- Pricing Table-->
+      <div class="col-lg-6 m-auto">
+        <div class="bg-white p-5 rounded-lg shadow">
+          <p class="cardText">시험 응시</p>
+
+          <div class="custom-separator my-4 mx-auto bg-primary"></div>
+            <form th:action="@{solveTest}" th:object="${test}" method="post">
+                <input style='display:none;' type="text" th:id="studentId" th:name="studentId" th:value="${session.loginUser.getStudentId}">
+                <input class="inputTest" type="text" th:field="*{testListId}" placeholder="문제를 조회할 문제집">
+                <button type="submit" class="btn btn-primary btn-block p-2 shadow rounded-pill">이동</button>
+          </form>
+        </div>
+      </div>
+      <!-- END -->
+
+    </div>
+  </div>
+        
+        
+    </div>
+    <!-- content layout end -->
+</html>
